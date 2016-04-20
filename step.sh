@@ -18,8 +18,8 @@ echo ${privoxylog_regexes} > regexes.txt
 grep -f regexes.txt request.txt > filtered_data.txt
 
 nb_line=$(wc -l filtered_data.txt | awk '{print $1}')
-grep_state=1
 
+grep_state=1
 if [[ ${nb_line} > 0 ]]; then
 	grep_state=0
 fi
@@ -49,11 +49,11 @@ ps aux | grep privoxy | grep -v grep | awk '{print "kill -9 " $2}'
 
 privoxy_state=1
 is_privoxy_working=$(ps aux | grep privoxy | grep -v grep | wc -l | awk '{print $1}')
-if [[ ${is_privoxy_working} == 0 ]]; then
+if [[ "$is_privoxy_working" -eq 0 ]]; then
 	privoxy_state=0
 fi
 
-if [[ ${grep_state} == 0 && ${is_privoxy_working} == 0 ]]; then
+if [[ "$grep_state" -eq 0 && "$is_privoxy_working" -eq 0 ]]; then
 	exit 0
 fi
 
