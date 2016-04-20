@@ -53,7 +53,7 @@ if [[ ${is_privoxy_working} == 0 ]]; then
 	privoxy_state=0
 fi
 
-if [[ ${grep_state} && ${is_privoxy_working} ]]; then
+if [[ ${grep_state} == 0 && ${is_privoxy_working} == 0 ]]; then
 	exit 0
 fi
 
