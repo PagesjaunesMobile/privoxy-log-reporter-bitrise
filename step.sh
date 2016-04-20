@@ -13,10 +13,6 @@ fi
 echo "============================="
 echo ""
 
-if [[ "${fauxpas_debug_mode}" = true ]]; then
-	set -x
-fi
-
 grep -E "Request: (.*)+" ${privoxy_logfile}  > request.txt
 echo ${privoxylog_regexes} > regexes.txt
 grep -f regexes.txt request.txt > filtered_data.txt
