@@ -45,7 +45,7 @@ echo "PRIVOXYLOG_FILTERED_DATA: ${PRIVOXYLOG_FILTERED_DATA}"
 echo "============================="
 echo ""
 
-ps aux | grep privoxy | grep -v grep | awk '{print "kill -9 " $1}'
+ps aux | grep privoxy | grep -v grep | awk '{print "kill -9 " $2}'
 
 privoxy_state=1
 is_privoxy_working=$(ps aux | grep privoxy | grep -v grep | wc -l | awk '{print $1}')
