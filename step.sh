@@ -10,6 +10,8 @@ echo ""
 echo "========== Configs =========="
 echo "logfile: ${privoxy_logfile}"
 echo "privoxylog_regexes: ${privoxylog_regexes}"
+echo "privoxylog_kill_privoxy: ${privoxylog_kill_privoxy}"
+echo "privoxylog_delete_privoxy_log: ${privoxylog_delete_privoxy_log}"
 if [[ -n "${privoxylog_debug_mode}" ]]; then
 	echo "privoxylog_debug_mode: ${privoxylog_debug_mode}"
 	echo "tmp_folder_path: ${tmp_folder_path}"
@@ -69,14 +71,19 @@ echo "privoxy_pid: ${privoxy_pid}"
 kill -9 ${privoxy_pid}
 
 # verifing that privoxy is properly killed
-privoxy_state=1
-is_privoxy_working=$(ps aux | grep privoxy | grep -v grep | wc -l | awk '{print $1}')
-if [[ "$is_privoxy_working" -eq 0 ]]; then
-	privoxy_state=0
+privoxy_state=0
+if [[ "${privoxylog_kill_privoxy}" = true ]]; then
+	privoxy_state=1
+	is_privoxy_working=$(ps aux | grep privoxy | grep -v grep | wc -l | awk '{print $1}')
+	if [[ "$is_privoxy_working" -eq 0 ]]; then
+		privoxy_state=0
+	fi
 fi
 
 # clean the logfile
-rm /usr/local/var/log/privoxy/logfile
+if [[ "${privoxylog_delete_privoxy_log}" = true ]]; then
+	rm /usr/local/var/log/privoxy/logfile
+fi
 
 # if data have been grep and privoxy is killed everything is a success
 if [[ "$grep_state" -eq 0 && "$is_privoxy_working" -eq 0 ]]; then

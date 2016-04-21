@@ -22,6 +22,26 @@ inputs:
       description: |
         You should use $PRIVOXY_LOG global variable for this.
       is_required: true
+  - privoxylog_kill_privoxy: "false"
+    opts:
+      title: Stop Privoxy
+      summary: ""
+      description: |
+        Should this script kill Privoxy process ?
+      is_required: true
+      value_options:
+        - "true"
+        - "false"
+  - privoxylog_delete_privoxy_log: "false"
+    opts:
+      title: Delete Log
+      summary: ""
+      description: |
+        Should this delete kill Privoxy log ?
+      is_required: true
+      value_options:
+        - "true"
+        - "false"
   - privoxylog_regexes:
     opts:
       title: Regex
