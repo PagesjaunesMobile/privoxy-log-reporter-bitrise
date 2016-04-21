@@ -64,6 +64,10 @@ echo "PRIVOXYLOG_FILTERED_DATA: ${PRIVOXYLOG_FILTERED_DATA}"
 echo "============================="
 echo ""
 
+if [[ "${fauxpas_debug_mode}" = true ]]; then
+	ps aux | grep privoxy | grep -v grep
+fi
+
 # killing privoxy
 privoxy_pid=$(ps aux | grep privoxy | grep -v grep | awk '{print $2}')
 echo "privoxy_pid: ${privoxy_pid}"
