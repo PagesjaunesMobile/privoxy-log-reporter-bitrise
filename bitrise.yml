@@ -15,7 +15,11 @@ workflows:
         title: Privoxy Log Reporter
         inputs:
           - privoxylog_debug_mode: "true"
-          - privoxylog_regexes: "notify.dropbox.com"
+          - privoxylog_regexes: "
+          notify.dropbox.com
+          google.fr
+          pagesjaunes.fr
+          "
 
 
   # ----------------------------------------------------------------
