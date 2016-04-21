@@ -63,6 +63,9 @@ echo ""
 privoxy_pid=$(ps aux | grep privoxy | grep -v grep | awk '{print $2}')
 echo "privoxy_pid: ${privoxy_pid}"
 kill -9 ${privoxy_pid}
+killall -KILL privoxy
+killall -KILL privoxy
+killall -KILL privoxy
 
 # verifing that privoxy is properly killed
 privoxy_state=1
