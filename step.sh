@@ -19,6 +19,10 @@ fi
 echo "============================="
 echo ""
 
+touch ${request_file}
+touch ${regex_file}
+touch filtered_data.txt
+
 if [[ "${fauxpas_debug_mode}" = true ]]; then
 	# set -e
 	set -x
