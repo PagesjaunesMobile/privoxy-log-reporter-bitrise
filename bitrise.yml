@@ -15,7 +15,7 @@ workflows:
         title: Privoxy Log Reporter
         inputs:
           - fauxpas_debug_mode: "true"
-          - privoxylog_regexes: "dropbox.com"
+          - privoxylog_regexes: "schema.org"
 
 
   # ----------------------------------------------------------------

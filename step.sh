@@ -1,6 +1,7 @@
 #!/bin/bash
 
 privoxy_logfile="/usr/local/var/log/privoxy/logfile"
+tmp_folder_path="/tmp/privoxy-log-reporter-bitrise/$(date +%s)/"
 
 # Configs
 echo ""
@@ -9,13 +10,19 @@ echo "logfile: ${privoxy_logfile}"
 echo "privoxylog_regexes: ${privoxylog_regexes}"
 if [[ -n "${fauxpas_debug_mode}" ]]; then
 	echo "fauxpas_debug_mode: ${fauxpas_debug_mode}"
+	echo "tmp_folder_path: ${tmp_folder_path}"
 fi
 echo "============================="
 echo ""
 
-grep -E "Request: (.*)+" ${privoxy_logfile}  > request.txt
-echo ${privoxylog_regexes} > regexes.txt
-grep -f regexes.txt request.txt > filtered_data.txt
+set -e
+
+request_file="${tmp_folder_path}request.txt"
+regex_file="${tmp_folder_path}regexes.txt"
+
+grep -E "Request: (.*)+" ${privoxy_logfile}  > request_file
+echo ${privoxylog_regexes} > regex_file
+grep -f regex_file request_file > filtered_data.txt
 
 nb_line=$(wc -l filtered_data.txt | awk '{print $1}')
 
@@ -32,15 +39,15 @@ if [[ "${fauxpas_debug_mode}" = true ]]; then
 	echo "🔥🔥🔥🔥🔥	privoxy_logfile	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
 	cat ${privoxy_logfile}
 	echo "🔥🔥🔥🔥🔥	regexes.txt	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
-	cat regexes.txt
+	cat regex_file
 	echo "🔥🔥🔥🔥🔥	request.txt	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
-	cat request.txt
+	cat request_file
 	echo "🔥🔥🔥🔥🔥	filtered_data.txt	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
 	cat filtered_data.txt
 fi
 
 # exporting filtered data
-export PRIVOXYLOG_FILTERED_DATA="$PWD/filtered_data.txt"
+envman add --key PRIVOXYLOG_FILTERED_DATA --value "$PWD/filtered_data.txt"
 echo ""
 echo "========== Outputs =========="
 echo "PRIVOXYLOG_FILTERED_DATA: ${PRIVOXYLOG_FILTERED_DATA}"
@@ -58,6 +65,8 @@ is_privoxy_working=$(ps aux | grep privoxy | grep -v grep | wc -l | awk '{print 
 if [[ "$is_privoxy_working" -eq 0 ]]; then
 	privoxy_state=0
 fi
+
+rm /usr/local/var/log/privoxy/logfile
 
 # if data have been grep and privoxy is killed everything is a success
 if [[ "$grep_state" -eq 0 && "$is_privoxy_working" -eq 0 ]]; then
