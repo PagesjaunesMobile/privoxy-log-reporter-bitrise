@@ -63,10 +63,6 @@ cat filtered_data.txt
 echo "============================="
 echo ""
 
-if [[ "${privoxylog_debug_mode}" = true ]]; then
-	ps aux | grep privoxy | grep -v grep
-fi
-
 # killing privoxy
 privoxy_pid=$(ps aux | grep privoxy | grep -v grep | awk '{print $2}')
 echo "privoxy_pid: ${privoxy_pid}"
@@ -79,6 +75,7 @@ if [[ "$is_privoxy_working" -eq 0 ]]; then
 	privoxy_state=0
 fi
 
+# clean the logfile
 rm /usr/local/var/log/privoxy/logfile
 
 # if data have been grep and privoxy is killed everything is a success
