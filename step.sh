@@ -19,6 +19,7 @@ fi
 echo "============================="
 echo ""
 
+mkdir -p ${tmp_folder_path}
 touch ${request_file}
 touch ${regex_file}
 touch filtered_data.txt
