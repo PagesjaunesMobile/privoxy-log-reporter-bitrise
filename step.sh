@@ -51,8 +51,6 @@ if [[ "${fauxpas_debug_mode}" = true ]]; then
 	cat ${regex_file}
 	echo "🔥🔥🔥🔥🔥	request.txt	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
 	cat ${request_file}
-	echo "🔥🔥🔥🔥🔥	filtered_data.txt	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
-	cat filtered_data.txt
 fi
 
 # exporting filtered data
@@ -61,6 +59,8 @@ envman add --key PRIVOXYLOG_FILTERED_DATA --value "$PWD/filtered_data.txt"
 echo ""
 echo "========== Outputs =========="
 echo "PRIVOXYLOG_FILTERED_DATA: ${PRIVOXYLOG_FILTERED_DATA}"
+echo "cat filtered_data.txt"
+cat filtered_data.txt
 echo "============================="
 echo ""
 
@@ -72,9 +72,6 @@ fi
 privoxy_pid=$(ps aux | grep privoxy | grep -v grep | awk '{print $2}')
 echo "privoxy_pid: ${privoxy_pid}"
 kill -9 ${privoxy_pid}
-killall -KILL privoxy
-killall -KILL privoxy
-killall -KILL privoxy
 
 # verifing that privoxy is properly killed
 privoxy_state=1
