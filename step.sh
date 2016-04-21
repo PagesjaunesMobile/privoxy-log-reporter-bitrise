@@ -10,8 +10,8 @@ echo ""
 echo "========== Configs =========="
 echo "logfile: ${privoxy_logfile}"
 echo "privoxylog_regexes: ${privoxylog_regexes}"
-if [[ -n "${fauxpas_debug_mode}" ]]; then
-	echo "fauxpas_debug_mode: ${fauxpas_debug_mode}"
+if [[ -n "${privoxylog_debug_mode}" ]]; then
+	echo "privoxylog_debug_mode: ${privoxylog_debug_mode}"
 	echo "tmp_folder_path: ${tmp_folder_path}"
 	echo "request_file: ${request_file}"
 	echo "regex_file: ${regex_file}"
@@ -24,8 +24,7 @@ touch ${request_file}
 touch ${regex_file}
 touch filtered_data.txt
 
-if [[ "${fauxpas_debug_mode}" = true ]]; then
-	# set -e
+if [[ "${privoxylog_debug_mode}" = true ]]; then
 	set -x
 fi
 
@@ -42,14 +41,14 @@ else
 	echo "No request found in the logfile."
 fi
 
-if [[ "${fauxpas_debug_mode}" = true ]]; then
+if [[ "${privoxylog_debug_mode}" = true ]]; then
 	echo "grep_state: ${grep_state}"
 	echo "nb_line: ${nb_line}"
-	echo "🔥🔥🔥🔥🔥	privoxy_logfile	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+	echo "[privoxy_logfile]"
 	cat ${privoxy_logfile}
-	echo "🔥🔥🔥🔥🔥	regexes.txt	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+	echo "[regexes]"
 	cat ${regex_file}
-	echo "🔥🔥🔥🔥🔥	request.txt	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+	echo "[request]"
 	cat ${request_file}
 fi
 
@@ -64,7 +63,7 @@ cat filtered_data.txt
 echo "============================="
 echo ""
 
-if [[ "${fauxpas_debug_mode}" = true ]]; then
+if [[ "${privoxylog_debug_mode}" = true ]]; then
 	ps aux | grep privoxy | grep -v grep
 fi
 

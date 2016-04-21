@@ -33,7 +33,7 @@ inputs:
         www.dropbox.com
         facebook.com
       is_required: true
-  - fauxpas_debug_mode: "false"
+  - privoxylog_debug_mode: "false"
     opts:
       title: Debug Mode
       summary: ""

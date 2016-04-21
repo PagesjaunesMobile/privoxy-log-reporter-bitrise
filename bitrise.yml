@@ -14,7 +14,7 @@ workflows:
     - path::./:
         title: Privoxy Log Reporter
         inputs:
-          - fauxpas_debug_mode: "true"
+          - privoxylog_debug_mode: "true"
           - privoxylog_regexes: "notify.dropbox.com"
 
 
