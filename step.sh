@@ -2,8 +2,9 @@
 
 privoxy_logfile="/usr/local/var/log/privoxy/logfile"
 tmp_folder_path="/tmp/privoxy-log-reporter-bitrise/$(date +%s)/"
-request_file="${tmp_folder_path}request.txt"
+request_file="$PWD/request.txt"
 regex_file="${tmp_folder_path}regexes.txt"
+filtered_data_file="$PWD/filtered_data.txt"
 
 # Configs
 echo ""
@@ -24,7 +25,7 @@ echo ""
 mkdir -p ${tmp_folder_path}
 touch ${request_file}
 touch ${regex_file}
-touch filtered_data.txt
+touch ${filtered_data_file}
 
 if [[ "${privoxylog_debug_mode}" = true ]]; then
 	set -x
@@ -32,9 +33,9 @@ fi
 
 grep -E "Request: (.*)+" ${privoxy_logfile}  > ${request_file}
 echo ${privoxylog_regexes} > ${regex_file}
-grep -f ${regex_file} ${request_file} > filtered_data.txt
+grep -f ${regex_file} ${request_file} > ${filtered_data_file}
 
-nb_line=$(wc -l filtered_data.txt | awk '{print $1}')
+nb_line=$(wc -l ${filtered_data_file} | awk '{print $1}')
 
 grep_state=1
 if [[ ${nb_line} > 0 ]]; then
@@ -55,24 +56,32 @@ if [[ "${privoxylog_debug_mode}" = true ]]; then
 fi
 
 # exporting filtered data
-export PRIVOXYLOG_FILTERED_DATA="$PWD/filtered_data.txt"
-envman add --key PRIVOXYLOG_FILTERED_DATA --value "$PWD/filtered_data.txt"
+export PRIVOXYLOG_FILTERED_DATA=${filtered_data_file}
+envman add --key PRIVOXYLOG_FILTERED_DATA --value ${filtered_data_file}
+
+export PRIVOXYLOG_REQUEST_DATA=${request_file}
+envman add --key PRIVOXYLOG_REQUEST_DATA --value ${request_file}
+
 echo ""
 echo "========== Outputs =========="
 echo "PRIVOXYLOG_FILTERED_DATA: ${PRIVOXYLOG_FILTERED_DATA}"
 echo "cat filtered_data.txt"
-cat filtered_data.txt
+cat ${filtered_data_file}
+echo "PRIVOXYLOG_REQUEST_DATA: ${PRIVOXYLOG_REQUEST_DATA}"
+echo "cat request.txt"
+cat ${request_file}
 echo "============================="
 echo ""
-
-# killing privoxy
-privoxy_pid=$(ps aux | grep privoxy | grep -v grep | awk '{print $2}')
-echo "privoxy_pid: ${privoxy_pid}"
-kill -9 ${privoxy_pid}
 
 # verifing that privoxy is properly killed
 privoxy_state=0
 if [[ "${privoxylog_kill_privoxy}" = true ]]; then
+
+	# killing privoxy
+	privoxy_pid=$(ps aux | grep privoxy | grep -v grep | awk '{print $2}')
+	echo "privoxy_pid: ${privoxy_pid}"
+	kill -9 ${privoxy_pid}
+
 	privoxy_state=1
 	is_privoxy_working=$(ps aux | grep privoxy | grep -v grep | wc -l | awk '{print $1}')
 	if [[ "$is_privoxy_working" -eq 0 ]]; then
