@@ -2,6 +2,8 @@
 
 privoxy_logfile="/usr/local/var/log/privoxy/logfile"
 tmp_folder_path="/tmp/privoxy-log-reporter-bitrise/$(date +%s)/"
+request_file="${tmp_folder_path}request.txt"
+regex_file="${tmp_folder_path}regexes.txt"
 
 # Configs
 echo ""
@@ -11,18 +13,20 @@ echo "privoxylog_regexes: ${privoxylog_regexes}"
 if [[ -n "${fauxpas_debug_mode}" ]]; then
 	echo "fauxpas_debug_mode: ${fauxpas_debug_mode}"
 	echo "tmp_folder_path: ${tmp_folder_path}"
+	echo "request_file: ${request_file}"
+	echo "regex_file: ${regex_file}"
 fi
 echo "============================="
 echo ""
 
-set -e
+if [[ "${fauxpas_debug_mode}" = true ]]; then
+	# set -e
+	set -x
+fi
 
-request_file="${tmp_folder_path}request.txt"
-regex_file="${tmp_folder_path}regexes.txt"
-
-grep -E "Request: (.*)+" ${privoxy_logfile}  > request_file
-echo ${privoxylog_regexes} > regex_file
-grep -f regex_file request_file > filtered_data.txt
+grep -E "Request: (.*)+" ${privoxy_logfile}  > ${request_file}
+echo ${privoxylog_regexes} > ${regex_file}
+grep -f ${regex_file} ${request_file} > filtered_data.txt
 
 nb_line=$(wc -l filtered_data.txt | awk '{print $1}')
 
@@ -39,14 +43,15 @@ if [[ "${fauxpas_debug_mode}" = true ]]; then
 	echo "🔥🔥🔥🔥🔥	privoxy_logfile	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
 	cat ${privoxy_logfile}
 	echo "🔥🔥🔥🔥🔥	regexes.txt	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
-	cat regex_file
+	cat ${regex_file}
 	echo "🔥🔥🔥🔥🔥	request.txt	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
-	cat request_file
+	cat ${request_file}
 	echo "🔥🔥🔥🔥🔥	filtered_data.txt	🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
 	cat filtered_data.txt
 fi
 
 # exporting filtered data
+export PRIVOXYLOG_FILTERED_DATA="$PWD/filtered_data.txt"
 envman add --key PRIVOXYLOG_FILTERED_DATA --value "$PWD/filtered_data.txt"
 echo ""
 echo "========== Outputs =========="
