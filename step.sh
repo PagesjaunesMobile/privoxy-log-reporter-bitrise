@@ -22,6 +22,8 @@ nb_line=$(wc -l filtered_data.txt | awk '{print $1}')
 grep_state=1
 if [[ ${nb_line} > 0 ]]; then
 	grep_state=0
+else
+	echo "No request found in the logfile."
 fi
 
 if [[ "${fauxpas_debug_mode}" = true ]]; then
