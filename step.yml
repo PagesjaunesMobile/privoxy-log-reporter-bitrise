@@ -1,7 +1,7 @@
 title: "Privoxy Log"
 summary: Read and export proxy log data
 description: |-
-  Bla Bla bla
+  Read and export proxy log data
 website: https://github.com/mackoj/privoxy-log-reporter-bitrise.git
 source_code_url: https://github.com/mackoj/privoxy-log-reporter-bitrise.git
 support_url: https://github.com/mackoj/privoxy-log-reporter-bitrise.git/issues
@@ -10,7 +10,7 @@ host_os_tags:
 project_type_tags:
   - ios
 type_tags:
-  - script
+  - proxy
 is_requires_admin_user: true
 is_always_run: false
 is_skippable: false
