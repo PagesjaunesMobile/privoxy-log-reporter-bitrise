@@ -1,7 +1,7 @@
 # privoxy-log-reporter-bitrise
 
 This step is useful to analyze Privoxy's logs.
-In order for this step to work you should first use `Privoxy` step.
+In order for this step to work you should first use [Privoxy](https://github.com/mackoj/privoxy-bitrise) step.
 
 # To Do
 
