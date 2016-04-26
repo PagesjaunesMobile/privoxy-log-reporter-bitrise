@@ -2,9 +2,9 @@ title: "Privoxy Log"
 summary: Read and export proxy log data
 description: |-
   Read and export proxy log data
-website: https://github.com/mackoj/privoxy-log-reporter-bitrise.git
-source_code_url: https://github.com/mackoj/privoxy-log-reporter-bitrise.git
-support_url: https://github.com/mackoj/privoxy-log-reporter-bitrise.git/issues
+website: https://github.com/PagesjaunesMobile/privoxy-log-reporter-bitrise.git
+source_code_url: https://github.com/PagesjaunesMobile/privoxy-log-reporter-bitrise.git
+support_url: https://github.com/PagesjaunesMobile/privoxy-log-reporter-bitrise.git/issues
 host_os_tags:
   - osx-10.10
 project_type_tags:
